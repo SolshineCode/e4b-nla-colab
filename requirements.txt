@@ -1,0 +1,11 @@
+torch
+transformers>=4.40
+peft>=0.10
+bitsandbytes>=0.43
+accelerate
+pandas
+pyarrow
+numpy
+scikit-learn
+sentence-transformers
+tqdm
