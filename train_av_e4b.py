@@ -205,8 +205,12 @@ def main():
         print(f"[e4b-av] resumed LoRA from {args.resume}")
     else:
         # Build target_modules from nla_model_params if available
-        target_modules = ["q_proj", "k_proj", "v_proj", "o_proj",
-                          "gate_proj", "up_proj", "down_proj"]
+        # Gemma4 vision encoder wraps proj layers in Gemma4ClippableLinear (not torch.nn.Linear)
+        # so a list-style target_modules hits them and PEFT raises ValueError.
+        # Using a regex with re.fullmatch() restricts LoRA to the language_model subtree only.
+        target_modules = (
+            r".*language_model.*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)"
+        )
         lora_cfg = LoraConfig(
             r=args.rank, lora_alpha=args.rank * 2,
             target_modules=target_modules,
