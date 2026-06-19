@@ -221,8 +221,12 @@ def main():
         n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
         print(f"[e4b-av] FRESH LoRA r={args.rank} alpha={args.rank*2} trainable_params={n_trainable/1e6:.2f}M")
 
-    from peft import prepare_model_for_kbit_training
-    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+    # prepare_model_for_kbit_training is designed to be called BEFORE get_peft_model.
+    # Called after, it iterates ALL params and casts bfloat16 -> float32, including the
+    # Gemma4 vision encoder (~8 GB bfloat16, not quantized by bitsandbytes) -> OOM on T4.
+    # get_peft_model already froze non-LoRA params. Just enable input grads and train.
+    # Gradient checkpointing is not needed at BS=1 (~46 MB activations across 42 layers).
+    model.enable_input_require_grads()
     model.train()
 
     # Injection hook
