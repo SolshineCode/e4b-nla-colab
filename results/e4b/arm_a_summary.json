@@ -1,0 +1,51 @@
+{
+  "experiment": "E4B ARM A (domain-aware InfoNCE, mean-centered injection)",
+  "date": "2026-06-19",
+  "kernel": "calebdeleeuw/e4b-nla-train-0619",
+  "model": "google/gemma-4-E4B",
+  "d_model": 2560,
+  "inject_layer": 24,
+  "lora_r": 8,
+  "steps_trained": 1500,
+  "seed": 17,
+  "corpus": "data/stage3_balanced/av_sft_balanced_e4b.parquet",
+  "n_train": 1356,
+  "n_eval": 144,
+  "arm": "A",
+  "objective": "domain-aware InfoNCE (16 same-domain + 16 cross-domain negatives)",
+  "mean_centered": true,
+  "kill_gate": {
+    "slope": -0.00254256,
+    "r2": 0.13452926,
+    "verdict": "PASS",
+    "threshold_slope": -0.002,
+    "threshold_r2": 0.10
+  },
+  "final_step": 1500,
+  "final_loss": 1.6022,
+  "eval_step": 1500,
+  "eval_n": 68,
+  "tfidf_doc_top1": 0.0,
+  "tfidf_p_value": 1.0,
+  "semantic_doc_top1": 0.0,
+  "semantic_p_value": 1.0,
+  "n_unique": 1,
+  "n_unique_denominator": 68,
+  "mode_collapsed": true,
+  "domain_locked": true,
+  "collapse_output_example": "The Zombie Chronicles review: watching the awful anthology film twice despite knowing the ending",
+  "gen_compare_step250": {
+    "n_unique": 1,
+    "mode_collapsed": true,
+    "domain_lock": true
+  },
+  "pre_registered_success_bar": {
+    "domain_tracking_p05_sustained": false,
+    "retrieval_p05_sustained": false,
+    "n_unique_ge8": false,
+    "not_domain_locked": false,
+    "verdict": "FAIL"
+  },
+  "verdict": "TOTAL_MODE_COLLAPSE",
+  "interpretation": "Loss descends (kill gate PASS) but model found single B-movie review template satisfying format constraint regardless of injected activation. Confirms F89: at E4B scale, the objective (contrastive SFT) is the wall, not the injection channel."
+}
