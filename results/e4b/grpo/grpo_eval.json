@@ -1,0 +1,130 @@
+{
+  "n_eval": 20,
+  "mean_hard_retrieval": 0.05,
+  "mean_soft_cosine": 0.09281426662642014,
+  "n_unique": 1,
+  "steps_trained": 600,
+  "verdict": "COLLAPSE",
+  "results": [
+    {
+      "doc_id": "doc_00000688",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09651636142394945
+    },
+    {
+      "doc_id": "doc_00000595",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.04925397618808997
+    },
+    {
+      "doc_id": "doc_00000675",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09427059259979229
+    },
+    {
+      "doc_id": "doc_00000277",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.06831072176152111
+    },
+    {
+      "doc_id": "doc_00000492",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.11701403944459043
+    },
+    {
+      "doc_id": "doc_00000155",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0965363828724901
+    },
+    {
+      "doc_id": "doc_00000773",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 1.0,
+      "soft_reward": 0.17265198596498835
+    },
+    {
+      "doc_id": "doc_00000250",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.05373676610870045
+    },
+    {
+      "doc_id": "doc_00000513",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.07276212468410581
+    },
+    {
+      "doc_id": "doc_00000734",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.06168487218144861
+    },
+    {
+      "doc_id": "doc_00000109",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.10154575392353213
+    },
+    {
+      "doc_id": "doc_00000432",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09641656401991418
+    },
+    {
+      "doc_id": "doc_00000081",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.12302107721645683
+    },
+    {
+      "doc_id": "doc_00000346",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0838937231597985
+    },
+    {
+      "doc_id": "doc_00000128",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09280187688846084
+    },
+    {
+      "doc_id": "doc_00000162",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09166629238885242
+    },
+    {
+      "doc_id": "doc_00000681",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.1158100493315849
+    },
+    {
+      "doc_id": "doc_00000538",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.06377465304025098
+    },
+    {
+      "doc_id": "doc_00000750",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.11246207317850662
+    },
+    {
+      "doc_id": "doc_00000096",
+      "text": "Now define a precise definition of the term closer with regard to the image and the context and precise statement about ",
+      "hard_reward": 0.0,
+      "soft_reward": 0.09215544615136913
+    }
+  ]
+}
