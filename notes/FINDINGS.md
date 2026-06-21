@@ -92,7 +92,66 @@ Pre-registered GRPO success bar: mean_hard_retrieval > 0.1 AND n_unique ≥ 5/20
 
 ---
 
-## §F91-GRPO (pending)
+## §F91-GRPO — E2B GRPO DAPO: reward-density bottleneck identified
 
-E2B GRPO results pending from kernel calebdeleeuw/e2b-nla-grpo-0620. Will append once
-the kernel completes. Watching for: mean_hard_retrieval, n_unique, verdict.
+**Date:** 2026-06-20
+**Kernel:** calebdeleeuw/e2b-nla-grpo-0620 (v4, 600 steps)
+**HF artifacts:** Solshine/e2b-nla-grpo-0620
+
+### Setup
+
+DAPO (no KL/reference model), G=4 completions/anchor, TF-IDF retrieval reward
+(0.8 × hard_retrieval@1 + 0.2 × cosine_soft), E2B L23 activations, 163 docs,
+mean-centered injection, LoRA r=16, lr=3e-5, seed 17.
+
+### Training reward trajectory
+
+| Steps | Mean reward |
+|---|---|
+| 1–100 | 0.0166 |
+| 201–400 | 0.0206 |
+| 401–600 | 0.0219 |
+| Max (single step) | 0.4313 |
+
+n_unique_5 (rolling 5-step diversity window, temperature=0.9): **sustained at 5 from step 5
+onward**. The model maintained stochastic diversity throughout training — unlike ARM A
+which collapsed at step 250.
+
+### Greedy eval result (n=20)
+
+| Metric | Value | Pre-registered bar |
+|---|---|---|
+| mean_hard_retrieval | 0.05 (1/20) | > 0.1 |
+| mean_soft_cosine | 0.093 | — |
+| n_unique (greedy) | 1 / 20 | >= 5 |
+| verdict | **COLLAPSE** | PASS |
+
+Collapse text: "Now define a precise definition of the term closer with regard to the
+image and" — a TF-IDF-gaming template (academic register, occasional retrieval hit on
+doc_00000773 which covers image proximity/closeness concepts).
+
+### Interpretation
+
+GRPO DAPO **fixes stochastic diversity** (n_unique_5=5 throughout) but fails to drive
+consistent hard retrieval under greedy decoding. The reward signal is too sparse: most
+training steps see 0 hard hits across G=4 rollouts (mean combined_reward ~0.02, which
+at REWARD_SOFT=0.2 implies mean_hard ~0.0-0.025 per rollout).
+
+The model learned a template that exploits the soft cosine component (academic vocabulary
+scores ~0.09 across all docs, better than random), and occasionally lands a hard hit
+(1/20 greedy, ~1/4 training steps got ≥1/4 rollouts with hard=1). But 600 steps of
+sparse signal is insufficient to condition greedy output on the injected activation.
+
+**Root cause: reward density, not diversity.** GRPO solved the diversity problem that SFT
+had. The remaining bottleneck is that TF-IDF hard retrieval@1 across 163 documents is too
+sparse a signal to bootstrap activation conditioning from a cold start.
+
+### Next options
+
+1. **Denser reward**: BM25 soft matching or n-gram overlap (BLEU/ROUGE) instead of
+   binary retrieval@1 — would give gradient signal on every step
+2. **Curriculum**: start with 10-20 highly-distinct docs to raise baseline hit rate, then
+   expand corpus
+3. **Warm start**: SFT on a handful of high-reward GRPO rollouts first, then GRPO
+4. **Longer run**: 2000+ steps — the sparse signal may propagate given enough steps
+   (the max single-step reward 0.43 shows the model CAN find correct content)

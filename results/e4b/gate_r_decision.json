@@ -2,7 +2,7 @@
   "gate": "R",
   "date": "2026-06-20",
   "decision": "GRPO_ON_E2B_FIRST",
-  "rationale": "All E2B arms (A=domain-aware InfoNCE; B=doc-id contrastive; C=plain CE; D=mean-centered) expected to collapse under SFT-only objective. E4B ARM A confirmed total mode collapse (n_unique=1/68, tfidf=0.0) despite kill gate PASS. Root cause: SFT loss can be minimized by finding a format-satisfying template independent of the injected activation. Reconstruction-reward (GRPO/RFT) is the decisive missing piece (F89). E2B is 4x cheaper for prototyping -- a positive E2B GRPO result enables a clean E4B scale test; a negative result stops the burn before GPU block 2.",
+  "rationale": "All E2B arms (A=domain-aware InfoNCE; B=doc-id contrastive; C=plain CE; D=mean-centered) expected to collapse under SFT-only objective. E4B ARM A confirmed total mode collapse (n_unique=1/68, tfidf=0.0) despite kill gate PASS. Root cause: SFT loss can be minimized by finding a format-satisfying template independent of the injected activation. Reconstruction-reward (GRPO/RFT) is the decisive missing piece (F89). E2B is 4x cheaper for prototyping.",
   "arm_a_result": {
     "n_unique": 1,
     "tfidf_doc_top1": 0.0,
@@ -10,16 +10,34 @@
     "mode_collapsed": true,
     "verdict": "TOTAL_MODE_COLLAPSE"
   },
-  "next_experiment": {
-    "name": "E2B GRPO (DAPO variant)",
-    "corpus": "data/stage1/rl.parquet (163 unique docs, E2B L23 activations + source text)",
-    "objective": "DAPO (no KL/reference model) + TF-IDF retrieval reward (binary hard) + cosine soft reward",
-    "reward_formula": "0.8 * hard_retrieval_at1 + 0.2 * cosine_similarity_to_true_doc",
-    "groups_G": 4,
-    "steps": 200,
-    "pre_registered_success_bar": "mean_hard_retrieval > 0.1 AND n_unique >= 5/20",
+  "grpo_result": {
     "kernel": "calebdeleeuw/e2b-nla-grpo-0620",
-    "hf_output_repo": "Solshine/e2b-nla-grpo-0620"
+    "version": "v4",
+    "steps_trained": 600,
+    "verdict": "COLLAPSE",
+    "mean_hard_retrieval": 0.05,
+    "mean_soft_cosine": 0.0928,
+    "n_unique_greedy_eval": 1,
+    "n_eval": 20,
+    "collapse_text": "Now define a precise definition of the term closer with regard to the image and",
+    "hard_hits": 1,
+    "note_stochastic_diversity": "n_unique_5 = 5 sustained throughout training at temperature=0.9; collapse is specific to greedy decoding",
+    "reward_trajectory": {
+      "steps_1_100_mean": 0.0166,
+      "steps_201_400_mean": 0.0206,
+      "steps_401_600_mean": 0.0219,
+      "max_single_step": 0.4313
+    },
+    "pre_registered_bar": "mean_hard > 0.1 AND n_unique >= 5/20",
+    "bar_met": false,
+    "hf_repo": "Solshine/e2b-nla-grpo-0620"
   },
-  "finding_ref": "F91"
+  "interpretation": "GRPO DAPO with TF-IDF retrieval reward maintains stochastic diversity (n_unique_5=5 under temperature=0.9) but fails to drive consistent hard retrieval under greedy decoding. The reward signal is too sparse (most steps: 0 hard hits across G=4 rollouts; mean_reward ~0.02) to reliably condition the model. The model learned a TF-IDF-gaming template that occasionally retrieves the correct document (1/20 = 5%) but cannot generalize. This confirms F89: the bottleneck is not diversity collapse (GRPO fixes that) but reward density -- the retrieval signal is too sparse to bootstrap consistent conditioning from a cold start.",
+  "finding_ref": "F91",
+  "next_step_options": [
+    "Denser reward: BM25 soft matching or n-gram overlap instead of binary TF-IDF retrieval@1",
+    "Curriculum: start with shorter, more distinct docs to raise baseline hard hit rate",
+    "Warm start: SFT on a few high-reward rollouts first, then GRPO",
+    "Longer GRPO run: 2000+ steps to see if the sparse signal eventually propagates"
+  ]
 }
