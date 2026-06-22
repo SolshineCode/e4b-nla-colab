@@ -1,0 +1,136 @@
+{
+  "verdict": "COLLAPSE",
+  "n_eval": 20,
+  "mean_hard_retrieval": 0.0,
+  "mean_soft_cosine": 0.0454,
+  "n_unique": 1,
+  "hard_hits": 0,
+  "pre_registered_bar": "mean_hard > 0.1 AND n_unique >= 5/20",
+  "model": "google/gemma-4-E4B",
+  "warmup_steps": 200,
+  "grpo_steps": 400,
+  "inject_layer": 24,
+  "hf_model_repo": "Solshine/e4b-nla-grpo-warmup-0621",
+  "results": [
+    {
+      "doc_id": "doc_00000001",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0551,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000047",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0815,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000096",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0438,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000128",
+      "hard_reward": 0.0,
+      "soft_reward": 0.068,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000178",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0427,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000215",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0526,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000244",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0532,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000279",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0354,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000311",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0426,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000363",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0355,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000381",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0252,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000447",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0153,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000500",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0364,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000536",
+      "hard_reward": 0.0,
+      "soft_reward": 0.041,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000587",
+      "hard_reward": 0.0,
+      "soft_reward": 0.061,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000624",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0645,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000649",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0603,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000694",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0249,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000723",
+      "hard_reward": 0.0,
+      "soft_reward": 0.022,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    },
+    {
+      "doc_id": "doc_00000753",
+      "hard_reward": 0.0,
+      "soft_reward": 0.0461,
+      "text": "\n\nThis document describes the activation of a neural network neuron, which is part of a document matching process similar to the following:\n\n<concepts>\n\n* 1. The document is about the activation of a neural network neuron.\n  2. 2. The document is about the activation of the neural network neuron.\n  "
+    }
+  ]
+}
