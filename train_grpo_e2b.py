@@ -110,8 +110,9 @@ print(f"Corpus mean norm: {np.linalg.norm(corpus_mean):.3f}")
 
 df_last['act_centered'] = df_last['act_np'].apply(lambda v: v - corpus_mean)
 
-doc_texts = dict(zip(df_last['doc_id'], df_last['detokenized_text_truncated']))
-doc_ids   = df_last['doc_id'].tolist()
+doc_texts      = dict(zip(df_last['doc_id'], df_last['detokenized_text_truncated']))
+doc_ids        = df_last['doc_id'].tolist()
+doc_id_to_idx  = {did: i for i, did in enumerate(doc_ids)}
 print(f"Corpus: {len(doc_ids)} documents")
 
 # -----------------------------------------------------------------------
@@ -134,7 +135,7 @@ def tfidf_reward(generated_text, true_doc_id):
         q_vec = tfidf.transform([generated_text])
         sims  = cosine_similarity(q_vec, tfidf_matrix)[0]
         top_idx = int(np.argmax(sims))
-        true_idx = doc_ids.index(true_doc_id) if true_doc_id in doc_ids else -1
+        true_idx = doc_id_to_idx.get(true_doc_id, -1)
         soft = float(sims[true_idx]) if true_idx >= 0 else 0.0
         hard = 1.0 if doc_ids[top_idx] == true_doc_id else 0.0
         return hard, soft
@@ -379,7 +380,8 @@ for step in range(1, STEPS + 1):
     if step % SAVE_EVERY == 0:
         ckpt = OUT_DIR / f"step_{step:06d}"
         model.save_pretrained(str(ckpt))
-        recent_rows = list(csv.reader(open(log_path)))[-10:]
+        with open(log_path) as _lf:
+            recent_rows = list(csv.reader(_lf))[-10:]
         recent_r = [float(rw[1]) for rw in recent_rows if len(rw) > 1 and rw[1] != 'mean_reward']
         meta = {
             "step": step, "mean_reward_last10": float(np.mean(recent_r)) if recent_r else 0.0,
