@@ -1,3 +1,24 @@
+# ---------------------------------------------------------------------------
+# CHANGELOG (additive; this script's run history is the E2B GRPO DAPO arm)
+#
+# 2026-06-20  c246bd9  Version that produced results/e4b/grpo/grpo_eval.json
+#                      (E2B GRPO v4, COLLAPSE, reward-density bottleneck). Landed
+#                      on master via PR #1 (squash e8657d9) with identical content.
+# 2026-06-22  8c1b9d4  Three post-run hygiene edits from the Gemini Code Assist
+#                      review on PR #2, none of which change behaviour or output:
+#                      (1) doc_id_to_idx dict replaces an O(N) list .index() lookup
+#                      in tfidf_reward (same value, same fallback of -1);
+#                      (2) the checkpoint-time log read uses a `with open(...)`
+#                      context manager instead of an unclosed file handle;
+#                      (3) alignment-only whitespace around the corpus dict setup.
+#                      The review's larger suggestions (batched rollouts, batched
+#                      injection, per-completion backward) were NOT applied: the
+#                      run this script records is complete and its artifacts are
+#                      committed, so behaviour-changing edits belong in a new
+#                      script, not here.
+# 2026-09-02  (merge)  Merge of master into finding/e4b-grpo-warmup-result kept
+#                      this (superset) version over master's; this block added.
+# ---------------------------------------------------------------------------
 import os, sys, subprocess, math, json, csv, random, time
 os.environ["PYTHONUNBUFFERED"] = "1"
 
@@ -110,8 +131,9 @@ print(f"Corpus mean norm: {np.linalg.norm(corpus_mean):.3f}")
 
 df_last['act_centered'] = df_last['act_np'].apply(lambda v: v - corpus_mean)
 
-doc_texts = dict(zip(df_last['doc_id'], df_last['detokenized_text_truncated']))
-doc_ids   = df_last['doc_id'].tolist()
+doc_texts      = dict(zip(df_last['doc_id'], df_last['detokenized_text_truncated']))
+doc_ids        = df_last['doc_id'].tolist()
+doc_id_to_idx  = {did: i for i, did in enumerate(doc_ids)}
 print(f"Corpus: {len(doc_ids)} documents")
 
 # -----------------------------------------------------------------------
@@ -134,7 +156,7 @@ def tfidf_reward(generated_text, true_doc_id):
         q_vec = tfidf.transform([generated_text])
         sims  = cosine_similarity(q_vec, tfidf_matrix)[0]
         top_idx = int(np.argmax(sims))
-        true_idx = doc_ids.index(true_doc_id) if true_doc_id in doc_ids else -1
+        true_idx = doc_id_to_idx.get(true_doc_id, -1)
         soft = float(sims[true_idx]) if true_idx >= 0 else 0.0
         hard = 1.0 if doc_ids[top_idx] == true_doc_id else 0.0
         return hard, soft
@@ -379,7 +401,8 @@ for step in range(1, STEPS + 1):
     if step % SAVE_EVERY == 0:
         ckpt = OUT_DIR / f"step_{step:06d}"
         model.save_pretrained(str(ckpt))
-        recent_rows = list(csv.reader(open(log_path)))[-10:]
+        with open(log_path) as _lf:
+            recent_rows = list(csv.reader(_lf))[-10:]
         recent_r = [float(rw[1]) for rw in recent_rows if len(rw) > 1 and rw[1] != 'mean_reward']
         meta = {
             "step": step, "mean_reward_last10": float(np.mean(recent_r)) if recent_r else 0.0,
