@@ -1,3 +1,24 @@
+# ---------------------------------------------------------------------------
+# CHANGELOG (additive; this script's run history is the E2B GRPO DAPO arm)
+#
+# 2026-06-20  c246bd9  Version that produced results/e4b/grpo/grpo_eval.json
+#                      (E2B GRPO v4, COLLAPSE, reward-density bottleneck). Landed
+#                      on master via PR #1 (squash e8657d9) with identical content.
+# 2026-06-22  8c1b9d4  Three post-run hygiene edits from the Gemini Code Assist
+#                      review on PR #2, none of which change behaviour or output:
+#                      (1) doc_id_to_idx dict replaces an O(N) list .index() lookup
+#                      in tfidf_reward (same value, same fallback of -1);
+#                      (2) the checkpoint-time log read uses a `with open(...)`
+#                      context manager instead of an unclosed file handle;
+#                      (3) alignment-only whitespace around the corpus dict setup.
+#                      The review's larger suggestions (batched rollouts, batched
+#                      injection, per-completion backward) were NOT applied: the
+#                      run this script records is complete and its artifacts are
+#                      committed, so behaviour-changing edits belong in a new
+#                      script, not here.
+# 2026-09-02  (merge)  Merge of master into finding/e4b-grpo-warmup-result kept
+#                      this (superset) version over master's; this block added.
+# ---------------------------------------------------------------------------
 import os, sys, subprocess, math, json, csv, random, time
 os.environ["PYTHONUNBUFFERED"] = "1"
 

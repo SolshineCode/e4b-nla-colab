@@ -155,3 +155,74 @@ sparse a signal to bootstrap activation conditioning from a cold start.
 3. **Warm start**: SFT on a handful of high-reward GRPO rollouts first, then GRPO
 4. **Longer run**: 2000+ steps — the sparse signal may propagate given enough steps
    (the max single-step reward 0.43 shows the model CAN find correct content)
+
+---
+
+## §F126 (main-repo number) — E4B warmup+GRPO: copy-task SFT warmup (200 steps) INCREASES loss; GRPO reward flat/declining; greedy eval collapses to one template — VERDICT: COLLAPSE (2026-06-21; entry written 2026-09-02)
+
+**Numbering note, for the record.** This repo's own entries above use the main repo's
+numbers where they existed at the time (§F89, §F90) and a local suffix scheme after that
+(§F91, §F91-GRPO). In `SolshineCode/deception-nanochat-sae-research/docs/FINDINGS.md` the
+same results are §F118 (E4B ARM A collapse = this repo's §F91) and §F119 (E2B GRPO DAPO =
+this repo's §F91-GRPO), and this result is **§F126**. PR #2's title called it "§F120";
+that was a mislabel (main-repo §F120 is the L23-injection-collapse mechanism, a different
+finding). The PR's result files landed in commit `5c5be0a` on 2026-06-22 without a
+narrative entry here; this entry supplies it, written from the committed artifacts, and
+was cross-checked against the main repo's §F126 text.
+
+**Date:** 2026-06-21 (run) / 2026-06-22 (PR #2 opened, Gemini review addressed in `8c1b9d4`)
+**Kaggle kernel:** `calebdeleeuw/e4b-grpo-warmup-0621` v6 (T4, ~9 h)
+**HF model:** `Solshine/e4b-nla-grpo-warmup-0621` (`warmup_ckpt` + `grpo_ckpts/step_{0100..0400}`)
+**HF data:** `Solshine/nla-e4b-corpus` `stage1/` (`rl_e4b_l24.parquet` + `e4b_l24_mean.npy`)
+**Results (this repo):** `results/e4b/grpo_warmup/grpo_eval.json` (greedy eval verdict, n=20, per-row texts) + `results/e4b/grpo_warmup/training_log.jsonl` (414 rows: extraction, 8 warmup checkpoints, 400 GRPO steps, 4 checkpoint uploads)
+
+### Setup
+
+`google/gemma-4-E4B` (D_MODEL=2560, 42 layers) at INJECT_LAYER=24, NF4 QLoRA r=8,
+`LORA_TARGETS=["linear"]`. Two phases: (1) **warmup**, 200 steps of copy-task SFT
+(injected activation → reproduce the source text; cross-entropy on source tokens);
+(2) **GRPO**, 400 steps of DAPO (no KL/reference), G=4, T=0.9, reward = 0.8 × TF-IDF
+hard retrieval@1 + 0.2 × soft cosine, advantages standardized and clipped at ±2.0.
+Pre-registered success bar: `mean_hard > 0.1 AND n_unique >= 5/20` on greedy eval.
+
+### Results (recomputed from `training_log.jsonl` and `grpo_eval.json` on 2026-09-02)
+
+| Metric | Value |
+|---|---|
+| Warmup loss, step 25 → step 200 | 18.4431 → 19.0952 (**increasing**) |
+| GRPO `mean_r`, quartile means (steps 0–99 / 100–199 / 200–299 / 300–399) | 0.0124 / 0.0169 / 0.0098 / 0.0088 |
+| GRPO max single-step `max_r` | 0.8498 (step 16; never approached again) |
+| GRPO `n_unique` per step (stochastic sampling) | 4/4 at every one of the 400 steps |
+| Greedy eval `mean_hard_retrieval` | 0.0 (0 hits / 20) |
+| Greedy eval `mean_soft_cosine` | 0.0454 |
+| Greedy eval `n_unique` | 1 / 20 |
+| Pre-registered bar | NOT MET |
+| **Verdict** | **COLLAPSE** |
+
+All 20 greedy outputs are the same content-free preamble ("This document describes the
+activation of a neural network neuron, which is part of a document matching process
+similar to the following: ...").
+
+### Interpretation
+
+The warmup loss never descended: 200 steps of copy-task SFT did not teach the model to
+read the injected vector, so GRPO started from a model with no read-out circuit and the
+reward stayed at the noise floor. Stochastic diversity during GRPO (4/4 unique every
+step) with greedy collapse (1/20) is the same signature as this repo's §F91-GRPO on E2B.
+Together with §F91 (ARM A), this is the third collapse at E4B scale and the second GRPO
+collapse; it falsifies the hypothesis that a short SFT warmup seeds enough content
+probability for a retrieval-shaped reward to bootstrap. The main repo's §F126 draws the
+same conclusion and points at the long-horizon prior-deviation ("grokking") recipe,
+demonstrated only on E2B at the time, as the next step; the E2B line's later history
+(dense-reward GRPO, then a relabeled-corpus SFT result far above it) is in the main
+repo's §F153 onward.
+
+### Why this PR sat unmerged from 2026-06-22 to 2026-09-02
+
+The `/gemini review` request was answered (two review passes on 2026-06-22), the three
+hygiene fixes were applied in `8c1b9d4`, and then the branch was left: PR #1 had been
+squash-merged separately, which made this branch "dirty" against master on the one
+file both touched (`train_grpo_e2b.py`, identical content plus the three fixes), and
+the main repo's §F126 was written pointing at "PR #2" for the result files. Merging
+this closes that dangling pointer: the artifacts §F126 cites are now on this repo's
+default branch.
